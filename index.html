@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <title>Minecraft 風格盲盒集齊計算器</title>
+  <!-- 像素化字體 -->
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    /* 全頁像素背景（也可以換成你自己的 Minecraft 草地貼圖） */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Press Start 2P', cursive;
+      background: #8db600 url('https://i.imgur.com/5yT3v5W.png') repeat; /* Minecraft 草地小方塊 */
+      color: #ffffff;
+    }
+    .container {
+      max-width: 700px;
+      margin: 60px auto;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.6);
+      border: 5px solid #3e5a16;
+      box-shadow: 0 0 10px #000;
+      text-align: center;
+    }
+    h1 {
+      font-size: 1.5em;
+      margin-bottom: 0.5em;
+    }
+    p {
+      font-size: 0.9em;
+      line-height: 1.5em;
+    }
+    button {
+      margin-top: 1em;
+      padding: 10px 20px;
+      font-family: 'Press Start 2P', cursive;
+      background-color: #5f8a2b;
+      border: 3px solid #3e5a16;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #7ebf49;
+    }
+    #result {
+      margin-top: 1.5em;
+      font-size: 1em;
+      line-height: 1.4em;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>盲盒集齊期望計算器</h1>
+    <p>▶ 套餐單價： <strong>200 元</strong><br>
+       ▶ 共有 6 種盲盒，抽中機率分別為：<br>
+       A: 0.20, B: 0.20, C: 0.15, D: 0.15, E: 0.15, F: 0.15
+    </p>
+    <button id="calcBtn">計算期望購買次數</button>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    const pricePerPack = 200;
+    const probs = [0.20, 0.20, 0.15, 0.15, 0.15, 0.15];
+
+    // 計算不等機率情況下的 coupon collector 期望值
+    function expectedTrials(probabilities) {
+      const n = probabilities.length;
+      let E = 0;
+      // 遍歷所有非空子集合
+      for (let mask = 1; mask < (1 << n); mask++) {
+        let sumP = 0, bits = 0;
+        for (let i = 0; i < n; i++) {
+          if (mask & (1 << i)) {
+            sumP += probabilities[i];
+            bits++;
+          }
+        }
+        // 包含-排除原理
+        E += (bits % 2 === 1 ? 1 : -1) / sumP;
+      }
+      return E;
+    }
+
+    document.getElementById('calcBtn').addEventListener('click', () => {
+      const exp = expectedTrials(probs);
+      const packs = Math.ceil(exp);  // 向上取整
+      const totalCost = packs * pricePerPack;
+      document.getElementById('result').innerHTML = `
+        <p>理論期望購買次數：<strong>${exp.toFixed(2)}</strong> 次<br>
+           至少要購買：<strong>${packs}</strong> 次<br>
+           總花費約為：<strong>${totalCost}</strong> 元
+        </p>`;
+    });
+  </script>
+</body>
+</html>
