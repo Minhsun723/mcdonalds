@@ -1,0 +1,184 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Press Start 2P', cursive;
+    background: #8db600 url('https://imgur.com/DqcP8Qk.jpg') repeat;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px 0;
+}
+.container {
+    max-width: 500px;
+    padding: 30px;
+    background: rgba(0, 0, 0, 0.7);
+    border: 8px solid #3e5a16;
+    box-shadow: 5px 5px 15px #000;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.header-logo-area {
+    margin-bottom: 1.5em;
+    text-align: center;
+    animation: logoBounce 1.5s ease-in-out;
+}
+@keyframes logoBounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-8px); }
+    60% { transform: translateY(-4px); }
+}
+.logo-composition {
+    display: flex; align-items: center; justify-content: center;
+    gap: 10px; margin-bottom: 0.5em;
+}
+.collab-logo { height: 50px; width: auto; max-width: 120px; object-fit: contain; }
+.collab-x { font-size: 2.5em; font-weight: bold; color: #ffdd00; line-height: 1; }
+.simulator-title {
+    font-size: 1.3em; color: #ffffff; text-shadow: 2px 2px #3e5a16;
+    margin-top: 0; margin-bottom: 0; line-height: 1.2;
+}
+
+.info-box {
+    background-color: rgba(255, 255, 255, 0.1); padding: 15px; margin-bottom: 1.5em;
+    border-radius: 5px; border: 2px dashed #5f8a2b; text-align: left;
+}
+.info-box p { margin-bottom: 0.5em; text-align: center; }
+.info-box ul { list-style-type: none; padding-left: 0; margin-top: 0.5em; }
+.info-box li { margin-bottom: 0.3em; font-size: 0.9em; }
+p { font-size: 1em; line-height: 1.6em; margin-bottom: 0.7em; }
+strong { color: #ffdd00; text-shadow: 1px 1px #3e5a16; }
+
+button {
+    margin-top: 1em; padding: 12px 25px; font-family: 'Press Start 2P', cursive;
+    font-size: 0.9em; background-color: #5f8a2b; border: 4px solid #3e5a16;
+    cursor: pointer; border-radius: 8px; box-shadow: 2px 2px #3e5a16;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease-in-out;
+    color: #ffffff;
+}
+button:hover {
+    background-color: #7ebf49;
+    box-shadow: 3px 3px #3e5a16, 0 0 10px #7ebf49;
+    transform: scale(1.05);
+}
+button:disabled { background-color: #4a6b22; cursor: not-allowed; opacity: 0.7; }
+
+.mode-selection-area {
+    padding: 20px 0; margin-top: 1.5em;
+    border-top: 2px dashed #5f8a2b;
+    text-align: center;
+}
+.mode-selection-area h2 {
+    font-size: 1.2em; color: #ffdd00; margin-bottom: 1em;
+}
+.mode-select-button {
+    font-size: 1em; margin: 0 10px 10px 10px;
+}
+.mode-select-button.active {
+    background-color: #7ebf49;
+    box-shadow: 3px 3px #3e5a16, 0 0 10px #7ebf49;
+    transform: scale(1.05);
+}
+
+#manualSimSection, #autoSimSection {
+    margin-top: 1.5em;
+    padding-top: 1em;
+    border-top: 2px solid #3e5a16;
+}
+#manualSimSection > button#simBtn {
+     display: block; margin-left: auto; margin-right: auto;
+}
+#result {
+    box-sizing: border-box; margin-top: 2em; font-size: 1.1em; line-height: 1.5em;
+    padding: 20px; background-color: rgba(255, 255, 255, 0.1); border-radius: 5px;
+    border: 2px solid #5f8a2b; min-height: 165px; display: flex; flex-direction: column;
+    justify-content: center; opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+#result.fade-in { opacity: 1; }
+#result p { margin-top: 0; margin-bottom: 0.5em; text-align: center; }
+#result p:last-child { margin-bottom: 0; }
+
+#autoSimSection h2 { font-size: 1.2em; color: #ffdd00; margin-bottom: 0.5em; }
+#autoSimSection .description { font-size: 0.9em; margin-bottom: 1em; }
+#autoSimSection div > label { margin-right: 10px; font-size: 0.9em; line-height: 1.5; }
+#autoSimSection input[type="number"] {
+    padding: 8px; font-family: 'Press Start 2P', cursive; font-size: 0.8em;
+    background-color: rgba(255, 255, 255, 0.1); color: #ffffff;
+    border: 2px solid #5f8a2b; border-radius: 5px; width: 80px;
+    text-align: center; vertical-align: middle;
+}
+#autoSimSection input[type="number"]::-webkit-inner-spin-button,
+#autoSimSection input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none; margin: 0;
+}
+#autoSimSection input[type="number"] { -moz-appearance: textfield; }
+
+#startAutoSimBtn {
+    padding: 10px 20px; font-size: 0.9em; display: block;
+    margin-left: auto; margin-right: auto; margin-bottom: 1em;
+}
+.progress-area {
+    margin-top: 1.5em; padding: 15px; background-color: rgba(0,0,0,0.3);
+    border-radius: 5px;
+}
+#progressText { font-size: 1em; margin-bottom: 10px; color: #ffdd00; }
+.progress-bar-container {
+    width: 100%; background-color: rgba(62, 90, 22, 0.5); border-radius: 5px;
+    height: 25px; overflow: hidden; border: 1px solid #3e5a16; position: relative;
+}
+.progress-bar {
+    width: 0%; height: 100%; background-color: #7ebf49; text-align: center;
+    line-height: 25px; color: white; font-size: 0.8em;
+    transition: width 0.2s linear; position: relative; overflow: hidden;
+    border-radius: 4px;
+}
+.progress-bar::after {
+    content: ''; position: absolute; top: 0; left: 0; bottom: 0; right: 0;
+    background-image: linear-gradient( -45deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent );
+    z-index: 1; background-size: 40px 40px; animation: progressBarStripes 1s linear infinite;
+    border-radius: inherit;
+}
+@keyframes progressBarStripes {
+    from { background-position: 40px 0; } to { background-position: 0 0; }
+}
+.analysis-result {
+    margin-top: 1.5em; padding: 20px; background-color: rgba(0,0,0,0.4);
+    border: 2px solid #5f8a2b; border-radius: 8px; text-align: left;
+    opacity: 0; transition: opacity 0.5s ease-in-out;
+}
+.analysis-result.fade-in { opacity: 1; }
+.analysis-result h3 { font-size: 1.1em; color: #ffdd00; text-align: center; margin-bottom: 1em; }
+.analysis-result p { font-size: 0.95em; line-height: 1.6; margin-bottom: 0.6em; }
+.analysis-result strong { color: #7ebf49; }
+.analysis-result hr {
+    border: 0; height: 1px; margin: 1em 0;
+    background-image: linear-gradient(to right, rgba(95, 138, 43, 0), rgba(95, 138, 43, 0.75), rgba(95, 138, 43, 0));
+}
+
+@media (max-width: 600px) {
+    body { align-items: flex-start; padding-top: 20px; padding-bottom: 20px; }
+    .container { margin: 20px auto; padding: 15px; max-width: 90%; }
+    .logo-composition { gap: 8px; }
+    .collab-logo { height: 35px; max-width: 90px; }
+    .collab-x { font-size: 1.8em; }
+    .simulator-title { font-size: 1.1em; }
+
+    .mode-selection-area h2 { font-size: 1.1em; }
+    .mode-select-button { font-size: 0.9em; padding: 10px 15px; }
+
+    #manualSimSection, #autoSimSection { margin-top: 1em; padding-top: 0.8em; }
+
+    .container p, .info-box li, .info-box p, #autoSimSection .description, #autoSimSection div > label {
+        font-size: 0.9em;
+    }
+    #autoSimSection input[type="number"] { font-size: 0.75em; width: 70px; }
+    button#simBtn, button#startAutoSimBtn { padding: 10px 18px; font-size: 0.85em; }
+    #result { font-size: 1em; padding: 15px; min-height: 145px; }
+    #result p { font-size: inherit; line-height: 1.4em; }
+    .progress-bar { font-size: 0.75em; line-height: 25px;}
+    .analysis-result p { font-size: 0.9em; }
+    .analysis-result h3 { font-size: 1em; }
+}
