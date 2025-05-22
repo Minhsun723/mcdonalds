@@ -151,6 +151,47 @@ ul.probability-list li:last-child {
     color: #bdbdbd;
 }
 
+/* --- 總機率顯示區塊樣式 --- */
+.total-probability-container {
+    margin-top: 12px; /* 與上方列表的間距 */
+    margin-bottom: 15px; /* 與下方 .info-footer 的間距 */
+    text-align: right; /* 讓文字靠右對齊 */
+}
+
+hr.info-divider { /* 用於 .info-box 內部的分隔線 */
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(95, 138, 43, 0), rgba(95, 138, 43, 0.6), rgba(95, 138, 43, 0)); /* 漸變分隔線 */
+    margin: 8px 0; /* 分隔線上下間距 */
+}
+
+p.total-probability-text {
+    font-size: 0.95em; /* 文字大小 */
+    color: #e0e0e0;   /* 文字顏色 */
+    margin: 0;        /* 移除 p 的預設 margin */
+    padding-right: 5px; /* 如果希望與上方列表的百分比稍微對齊 */
+}
+
+p.total-probability-text strong {
+    color: #ffdd00;   /* 強調「100%」的顏色，同 .percentage */
+    font-weight: normal; /* Press Start 2P 字體 normal 就有像素感 */
+    margin-left: 5px; /* 與「總機率：」的間距 */
+}
+
+/* --- 手機版總機率顯示微調 --- */
+@media (max-width: 600px) {
+    .total-probability-container {
+        margin-top: 10px;
+        margin-bottom: 12px;
+    }
+    hr.info-divider {
+        margin: 6px 0;
+    }
+    p.total-probability-text {
+        font-size: 0.9em; /* 手機版字體稍小 */
+    }
+}
+
 /* --- 手機版 .info-box 內部微調 --- */
 @media (max-width: 600px) {
     .info-box {
