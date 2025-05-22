@@ -45,13 +45,164 @@ body {
     margin-top: 0; margin-bottom: 0; line-height: 1.2;
 }
 
+/* --- .info-box 美化 --- */
 .info-box {
-    background-color: rgba(255, 255, 255, 0.1); padding: 15px; margin-bottom: 1.5em;
-    border-radius: 5px; border: 2px dashed #5f8a2b; text-align: left;
+    background-color: rgba(0, 0, 0, 0.75); /* 背景稍微加深 */
+    padding: 20px 25px; /* 調整內邊距 */
+    margin-bottom: 2em; /* 與下方模式選擇區的間距 */
+    border-radius: 8px;
+    border: 3px solid #5f8a2b; /* 邊框改為實線，並加粗一點 */
+    box-shadow: 0px 0px 12px rgba(0,0,0,0.5); /* 加一點陰影 */
+    text-align: left; /* 確保內部 flex 元素從左開始排列 */
 }
-.info-box p { margin-bottom: 0.5em; text-align: center; }
-.info-box ul { list-style-type: none; padding-left: 0; margin-top: 0.5em; }
-.info-box li { margin-bottom: 0.3em; font-size: 0.9em; }
+
+.info-item {
+    display: flex;
+    align-items: center; /* 圖示和文字垂直居中 */
+    margin-bottom: 10px;
+    font-size: 0.95em; /* 桌面版 info-item 內文字大小 */
+    line-height: 1.6;
+}
+/* probability-header 是 info-item 的一種，調整其下方間距 */
+.info-item.probability-header {
+    margin-bottom: 8px;
+}
+
+.info-icon {
+    font-size: 1.3em; /* 圖示大小 */
+    margin-right: 10px;
+    color: #ffdd00; /* 圖示顏色 */
+    width: 25px; /* 給圖示一個固定寬度以對齊 */
+    text-align: center;
+    flex-shrink: 0; /* 防止圖示被壓縮 */
+}
+
+.info-item strong { /* 例如價格、數量等的強調 */
+    color: #ffffff;
+    background-color: #5f8a2b;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-left: 6px;
+    font-size: 1.05em; /* 讓強調的數字稍大一點 (相對於 .info-item) */
+}
+.price-info strong, .count-info strong {
+    letter-spacing: 1px; /* 數字間距 */
+}
+.count-info span:last-of-type { /* “不同的盲盒喔！” 這段文字 */
+    margin-left: 5px;
+    color: #cccccc;
+}
+
+.probability-header {
+    margin-top: 15px; /* 與上方資訊的間距 */
+    font-weight: normal; /* Press Start 2P 字體本身就比較像素感 */
+}
+.probability-header .info-icon {
+    color: #7ebf49; /* 機率區的圖示換個顏色 */
+}
+.probability-header span { /* 機率標題文字 */
+    color: #f0f0f0;
+}
+
+ul.probability-list {
+    list-style-type: none;
+    padding-left: 5px; /* 列表稍微內縮 */
+    margin-top: 0;
+    margin-bottom: 1.5em;
+}
+
+ul.probability-list li {
+    margin-bottom: 6px;
+    font-size: 0.9em; /* 桌面版列表項文字大小 (相對於 .info-box) */
+    display: flex;
+    align-items: baseline; /* 讓名稱和百分比基線對齊 */
+    padding: 6px 0;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.15);
+}
+ul.probability-list li:last-child {
+    border-bottom: none;
+}
+
+.item-name {
+    color: #e0e0e0; /* 物品名稱顏色 */
+    flex-grow: 1; /* 讓名稱佔據可用空間 */
+}
+.item-separator { /* 名稱和百分比之間的裝飾性分隔 */
+    flex-grow: 1; /* 佔據中間空間 */
+    border-bottom: 1px dotted rgba(255,255,255,0.3);
+    margin: 0 10px;
+    position: relative;
+    bottom: 4px; /* 微調點點線的垂直位置 */
+}
+
+.percentage { /* 機率百分比的樣式 */
+    color: #ffdd00;
+    font-weight: normal;
+    flex-shrink: 0; /* 防止百分比被壓縮 */
+    margin-left: 5px; /* 與分隔線的間距 */
+}
+
+.info-footer {
+    text-align: center;
+    font-size: 0.9em; /* 頁腳文字大小 (相對於 .info-box) */
+    margin-top: 1.5em;
+    padding-top: 1em;
+    border-top: 2px solid #5f8a2b; /* 分隔線改為實線 */
+    color: #bdbdbd;
+}
+
+/* --- 手機版 .info-box 內部微調 --- */
+@media (max-width: 600px) {
+    .info-box {
+        padding: 15px 20px;
+    }
+    /* 注意：以下 font-size 會受到全局手機版 .container p 等設定的影響 */
+    /* 如果全局設定為 font-size: 0.9em; 那麼這裡的相對單位會基於此 */
+    /* 我們在這裡明確指定手機版的字體大小，以確保效果 */
+
+    .info-item {
+        font-size: 0.9em; /* 手機版 info-item 文字大小 */
+        margin-bottom: 8px;
+    }
+    .info-icon {
+        font-size: 1.2em; /* 手機版圖示大小 (相對於 .info-item 的 0.9em) */
+        margin-right: 8px;
+        width: 20px;
+    }
+    .info-item strong {
+        padding: 2px 6px;
+        font-size: 1em; /* 手機版強調文字大小 (相對於 .info-item 的 0.9em) */
+    }
+     .count-info { /* 手機上讓數量那行文字更緊湊些 */
+        flex-wrap: wrap; /* 允許換行 */
+    }
+    .count-info span:last-of-type {
+        margin-left: 0;
+        display: block; /* 換行顯示 */
+        width: 100%;
+        padding-left: 28px; /* 大致對齊上方文字 (跳過圖示寬度+間距) */
+        font-size: 0.9em; /* 相對於 .count-info (即 .info-item) 的字體大小 */
+        margin-top: 2px; /* 與上方文字的微小間距 */
+    }
+
+    .probability-header {
+        margin-top: 12px;
+    }
+    ul.probability-list li {
+        font-size: 0.85em; /* 手機版列表文字大小 */
+        margin-bottom: 4px;
+        padding: 5px 0;
+    }
+    .item-separator {
+        margin: 0 8px;
+        bottom: 3px;
+    }
+    .info-footer {
+        font-size: 0.85em; /* 手機版頁腳文字大小 */
+        margin-top: 1.2em;
+        padding-top: 0.8em;
+    }
+}
 p { font-size: 1em; line-height: 1.6em; margin-bottom: 0.7em; }
 strong { color: #ffdd00; text-shadow: 1px 1px #3e5a16; }
 
