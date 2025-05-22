@@ -1,108 +1,66 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8" />
-  <title>麥當勞麥塊盲盒收集模擬</title>
-  <link rel="icon" href="minecraft_22400.ico" type="image/x-icon">
-  <!-- 像素化字體 -->
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Press Start 2P', cursive;
-      background: #8db600 url('https://imgur.com/DqcP8Qk.jpg') repeat;
-      color: #ffffff;
-    }
-    .container {
-      max-width: 700px;
-      margin: 60px auto;
-      padding: 20px;
-      background: rgba(0, 0, 0, 0.6);
-      border: 5px solid #3e5a16;
-      box-shadow: 0 0 10px #000;
-      text-align: center;
-    }
-    h1 {
-      font-size: 1.5em;
-      margin-bottom: 0.5em;
-    }
-    p {
-      font-size: 0.9em;
-      line-height: 1.5em;
-    }
-    button {
-      margin-top: 1em;
-      padding: 10px 20px;
-      font-family: 'Press Start 2P', cursive;
-      background-color: #5f8a2b;
-      border: 3px solid #3e5a16;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #7ebf49;
-    }
-    #result {
-      margin-top: 1.5em;
-      font-size: 1em;
-      line-height: 1.4em;
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <title>麥當勞麥塊盲盒收集模擬</title>
+    <link rel="icon" href="minecraft_22400.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>盲盒實際收集模擬</h1>
-    <p>
-  ▶ 套餐單價：<strong>200 元</strong><br>
-  ▶ 共有 6 種盲盒，機率分別：<br>
-  大鳥姊姊鞘翅：0.20<br>
-  漢堡神偷殭屍：0.20<br>
-  薯條頭盔：0.15<br>
-  奶昔大哥龍蛋：0.15<br>
-  蘇打藥水：0.15<br>
-  大麥克方塊：0.15
-</p>
-    <button id="simBtn">模擬一次收集過程</button>
-    <div id="result"></div>
-  </div>
+    <div class="container">
+        <div class="header-logo-area">
+            <div class="logo-composition">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/McDonald%27s_Golden_Arches.svg/200px-McDonald%27s_Golden_Arches.svg.png" alt="麥當勞 Logo" class="collab-logo" id="mcdLogo">
+                <span class="collab-x">x</span>
+                <img src="https://www.minecraft.net/content/dam/minecraftnet/games/minecraft/logos/Global-Header_MCCB-Logo_300x51.svg" alt="麥塊 Logo" class="collab-logo" id="mcLogo">
+            </div>
+            <p class="simulator-title">盲盒收集模擬器</p>
+        </div>
 
-  <script>
-    const pricePerPack = 200;
-    const probs = [0.20, 0.20, 0.15, 0.15, 0.15, 0.15];
+        <div class="info-box">
+            <p> ▶ <strong>套餐單價：</strong>200 元<br> ▶ 總共有 <strong>6 種</strong> 不同的盲盒喔！<br> ▶ 各種盲盒的出現機率是： </p>
+            <ul>
+                <li>大鳥姊姊鞘翅：<strong>20%</strong></li>
+                <li>漢堡神偷殭屍：<strong>20%</strong></li>
+                <li>薯條頭盔：<strong>15%</strong></li>
+                <li>奶昔大哥龍蛋：<strong>15%</strong></li>
+                <li>蘇打藥水：<strong>15%</strong></li>
+                <li>大麥克方塊：<strong>15%</strong></li>
+            </ul>
+            <p>試試看你需要多少摳摳才能全部收集到！</p>
+        </div>
 
-    // 建立累積機率陣列
-    const cumProbs = [];
-    probs.reduce((sum, p) => {
-      cumProbs.push(sum + p);
-      return sum + p;
-    }, 0);
+        <div id="modeSelection" class="mode-selection-area">
+            <h2>請選擇模擬模式：</h2>
+            <button id="selectManualBtn" class="mode-select-button">進行單次模擬</button>
+            <button id="selectAutoBtn" class="mode-select-button">進行多次自動模擬</button>
+        </div>
 
-    // 模擬一次抽盲盒直到集齊所有種類
-    function simulateOnce() {
-      const collected = new Set();
-      let draws = 0;
-      while (collected.size < probs.length) {
-        draws++;
-        const r = Math.random();
-        // 找到落在哪個機率區間
-        for (let i = 0; i < cumProbs.length; i++) {
-          if (r < cumProbs[i]) {
-            collected.add(i);
-            break;
-          }
-        }
-      }
-      return draws;
-    }
+        <div id="manualSimSection" style="display: none;">
+            <button id="simBtn">模擬一次收集過程</button>
+            <div id="result"> <p>&nbsp;</p> </div>
+        </div>
 
-    document.getElementById('simBtn').addEventListener('click', () => {
-      const trials = simulateOnce();
-      const cost = trials * pricePerPack;
-      document.getElementById('result').innerHTML = `
-        <p>實際抽取次數：<strong>${trials}</strong> 次<br>
-           總花費：<strong>${cost}</strong> 元
-        </p>`;
-    });
-  </script>
+        <div id="autoSimSection" style="display: none;">
+            <h2>自動模擬多次</h2>
+            <p class="description">想知道平均手氣如何嗎？試試看自動模擬大量收集過程吧！</p>
+            <div>
+                <label for="simulationCount">輸入模擬次數 (1-5000)：</label>
+                <input type="number" id="simulationCount" name="simulationCount" min="1" max="5000" value="100">
+            </div>
+            <button id="startAutoSimBtn">開始自動模擬！</button>
+            <div id="autoSimProgress" class="progress-area" style="display: none;">
+                <p id="progressText">模擬進行中...</p>
+                <div class="progress-bar-container">
+                    <div id="progressBar" class="progress-bar">0%</div>
+                </div>
+            </div>
+            <div id="autoSimResult" class="analysis-result" style="display: none;">
+                </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
