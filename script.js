@@ -188,6 +188,15 @@ startAutoSimBtn.addEventListener('click', () => {
         progressBarElem.textContent = Math.round(progress) + '%';
         progressTextElem.textContent = `模擬進行中... (${newCurrentIndex}/${numSimulations})`;
 
+        // 更新苦力怕頭像的位置
+        const creeperHeadElem = document.getElementById('creeperHead');
+        if (creeperHeadElem) {
+            // 為了讓頭像的中心點大致在進度條的"頭部"
+            // 我們設定 left 為 progress 百分比。
+            // CSS 中的 transform: translate(-50%, -50%) 會處理對齊。
+            creeperHeadElem.style.left = progress + '%';
+        }
+
         if (newCurrentIndex < numSimulations) {
             requestAnimationFrame(() => runSimulationBatch(newCurrentIndex));
         } else {
