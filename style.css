@@ -2,7 +2,11 @@ body {
     margin: 0;
     padding: 0;
     font-family: 'Press Start 2P', cursive;
-    background: #8db600 url('https://imgur.com/DqcP8Qk.jpg') repeat;
+    /* 原來的: background: #8db600 url('https://imgur.com/DqcP8Qk.jpg') repeat; */
+    /* 修改為: */
+    background-color: #8db600; /* 背景底色 */
+    background-image: url('grass.jpg'); /* 預設背景圖片 (會被JS隨機替換) */
+    background-repeat: repeat; /* 背景圖片平鋪 */
     color: #ffffff;
     display: flex;
     justify-content: center;
