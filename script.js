@@ -52,6 +52,20 @@ const progressTextElem = document.getElementById('progressText');
 const progressBarElem = document.getElementById('progressBar');
 const autoSimResultDiv = document.getElementById('autoSimResult');
 
+// --- 新增：獲取音效元素 ---
+const simCompleteSound = document.getElementById('simCompleteSound');
+
+// --- 播放音效的輔助函數 ---
+function playSound(soundElement) {
+    if (soundElement) {
+        soundElement.currentTime = 0; // 從頭播放 (若短時間重複觸發)
+        soundElement.play().catch(error => {
+            // 捕獲並處理可能的播放錯誤，例如使用者尚未與頁面互動
+            console.warn("音效播放失敗 (可能是瀏覽器限制，請先與頁面互動):", error);
+        });
+    }
+}
+
 // --- 模式選擇邏輯 ---
 selectManualBtn.addEventListener('click', () => {
     manualSimSectionDiv.style.display = 'block';
@@ -106,6 +120,8 @@ simBtn.addEventListener('click', () => {
         void resultDiv.offsetWidth; // 強制回流以重啟動畫
         resultDiv.classList.add('fade-in');
         resultDiv.style.height = '';
+        // --- 新增：播放音效 ---
+        playSound(simCompleteSound);
     }, 50);
 });
 
@@ -189,4 +205,6 @@ function displayAnalysisResults(allDraws, totalDraws, minDraws, maxDraws, numSim
     autoSimResultDiv.style.display = 'block';
     void autoSimResultDiv.offsetWidth;
     autoSimResultDiv.classList.add('fade-in');
+    // --- 新增：播放音效 ---
+    playSound(simCompleteSound);
 }
