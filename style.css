@@ -320,21 +320,56 @@ button:disabled { background-color: #4a6b22; cursor: not-allowed; opacity: 0.7; 
 }
 #progressText { font-size: 1em; margin-bottom: 10px; color: #ffdd00; }
 .progress-bar-container {
-    width: 100%; background-color: rgba(62, 90, 22, 0.5); border-radius: 5px;
-    height: 25px; overflow: hidden; border: 1px solid #3e5a16; position: relative;
+    width: 100%;
+    background-color: rgba(62, 90, 22, 0.5);
+    border-radius: 5px;
+    height: 25px; /* 內容區域高度 */
+    border: 1px solid #3e5a16; /* 上下邊框各1px */
+    position: relative;
+    /* overflow: hidden; */ /* ***** 確保此行被移除或註解，否則頭像會被裁切 ***** */
+    margin-top: 5px;
+    margin-bottom: 10px;
 }
+
+/* .progress-bar 樣式通常不需要為此改動，保持其 z-index 低於頭像即可 */
 .progress-bar {
-    width: 0%; height: 100%; background-color: #7ebf49; text-align: center;
-    line-height: 25px; color: white; font-size: 0.8em;
-    transition: width 0.2s linear; position: relative; overflow: hidden;
+    width: 0%;
+    height: 100%;
+    background-color: #7ebf49;
+    text-align: center;
+    line-height: 25px;
+    color: white;
+    font-size: 0.8em;
+    transition: width 0.2s linear;
+    position: relative;
+    overflow: hidden; /* 這裡的 overflow:hidden 是為了進度條本身的圓角 */
     border-radius: 4px;
+    z-index: 5;
 }
+
 .progress-bar::after {
     content: ''; position: absolute; top: 0; left: 0; bottom: 0; right: 0;
     background-image: linear-gradient( -45deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent );
     z-index: 1; background-size: 40px 40px; animation: progressBarStripes 1s linear infinite;
     border-radius: inherit;
 }
+
+/* ***** 新增以下 #creeperHead 的樣式 ***** */
+#creeperHead {
+    position: absolute;
+    height: 30px;       /* 頭像高度 */
+    width: auto;        /* 寬度自動 */
+    top: -3px;         /* ***** 修改: (容器頂部邊框厚度) - (頭像高度) = 1px - 30px = -29px ***** */
+                        /* 這會將頭像的頂部定位在容器頂部上方29px的位置，
+                           從而使其底部剛好在容器頂部邊框的下方，即與進度條填充部分的頂部對齊。 */
+    left: 0%;           /* 初始水平位置，會被 JS 更新 */
+    transform: translateX(-50%); /* 使頭像的水平中心點對齊 JS 設定的 left 位置 */
+    z-index: 10;
+    transition: left 0.2s linear;
+    filter: drop-shadow(1px 2px 1px rgba(0,0,0,0.4)); /* 保留陰影效果 */
+    border-radius: 5px;
+}
+
 @keyframes progressBarStripes {
     from { background-position: 40px 0; } to { background-position: 0 0; }
 }
