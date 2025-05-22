@@ -1,3 +1,25 @@
+document.addEventListener('DOMContentLoaded', function() {
+    // 請將下面的檔案名稱替換成您放在專案根目錄下的實際圖片檔案名稱
+    const backgroundTexturePaths = [
+        'grass.jpeg',  // 例如：您的草地材質 (請替換)
+        'stone.png',  // 例如：您的石頭材質 (請替換)
+        'wood.png',    // 例如：您的木頭材質 (請替換)
+        'dirt.jpg'
+    ];
+
+    // 隨機選擇一個背景圖片的路徑
+    const randomIndex = Math.floor(Math.random() * backgroundTexturePaths.length);
+    const selectedTexturePath = backgroundTexturePaths[randomIndex];
+
+    // 設定 body 的背景圖片
+    document.body.style.backgroundImage = `url('${selectedTexturePath}')`;
+
+    // 簡易檢查，如果您的檔名包含 "YOUR_" 或類似的預設提示字串，可以保留此檢查
+    if (selectedTexturePath.includes("YOUR_FILENAME_HERE")) {
+        console.warn("提醒：您可能還沒有設定正確的本地隨機背景圖片路徑！將使用 CSS 中的預設背景。實際設定路徑: " + selectedTexturePath);
+    }
+});
+
 const pricePerPack = 200;
 const probs = [0.20, 0.20, 0.15, 0.15, 0.15, 0.15];
 const cumProbs = [];
