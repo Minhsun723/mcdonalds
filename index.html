@@ -2,16 +2,15 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <title>Minecraft 風格盲盒集齊計算器</title>
+  <title>麥當勞麥塊盲盒收集模擬</title>
   <!-- 像素化字體 -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
-    /* 全頁像素背景（也可以換成你自己的 Minecraft 草地貼圖） */
     body {
       margin: 0;
       padding: 0;
       font-family: 'Press Start 2P', cursive;
-      background: #8db600 url('https://i.imgur.com/5yT3v5W.png') repeat; /* Minecraft 草地小方塊 */
+      background: #8db600 url('https://i.imgur.com/5yT3v5W.png') repeat;
       color: #ffffff;
     }
     .container {
@@ -51,12 +50,12 @@
 </head>
 <body>
   <div class="container">
-    <h1>盲盒集齊期望計算器</h1>
+    <h1>盲盒實際收集模擬</h1>
     <p>▶ 套餐單價： <strong>200 元</strong><br>
-       ▶ 共有 6 種盲盒，抽中機率分別為：<br>
+       ▶ 共有 6 種盲盒，機率分別：<br>
        A: 0.20, B: 0.20, C: 0.15, D: 0.15, E: 0.15, F: 0.15
     </p>
-    <button id="calcBtn">計算期望購買次數</button>
+    <button id="simBtn">模擬一次收集過程</button>
     <div id="result"></div>
   </div>
 
@@ -64,33 +63,37 @@
     const pricePerPack = 200;
     const probs = [0.20, 0.20, 0.15, 0.15, 0.15, 0.15];
 
-    // 計算不等機率情況下的 coupon collector 期望值
-    function expectedTrials(probabilities) {
-      const n = probabilities.length;
-      let E = 0;
-      // 遍歷所有非空子集合
-      for (let mask = 1; mask < (1 << n); mask++) {
-        let sumP = 0, bits = 0;
-        for (let i = 0; i < n; i++) {
-          if (mask & (1 << i)) {
-            sumP += probabilities[i];
-            bits++;
+    // 建立累積機率陣列
+    const cumProbs = [];
+    probs.reduce((sum, p) => {
+      cumProbs.push(sum + p);
+      return sum + p;
+    }, 0);
+
+    // 模擬一次抽盲盒直到集齊所有種類
+    function simulateOnce() {
+      const collected = new Set();
+      let draws = 0;
+      while (collected.size < probs.length) {
+        draws++;
+        const r = Math.random();
+        // 找到落在哪個機率區間
+        for (let i = 0; i < cumProbs.length; i++) {
+          if (r < cumProbs[i]) {
+            collected.add(i);
+            break;
           }
         }
-        // 包含-排除原理
-        E += (bits % 2 === 1 ? 1 : -1) / sumP;
       }
-      return E;
+      return draws;
     }
 
-    document.getElementById('calcBtn').addEventListener('click', () => {
-      const exp = expectedTrials(probs);
-      const packs = Math.ceil(exp);  // 向上取整
-      const totalCost = packs * pricePerPack;
+    document.getElementById('simBtn').addEventListener('click', () => {
+      const trials = simulateOnce();
+      const cost = trials * pricePerPack;
       document.getElementById('result').innerHTML = `
-        <p>理論期望購買次數：<strong>${exp.toFixed(2)}</strong> 次<br>
-           至少要購買：<strong>${packs}</strong> 次<br>
-           總花費約為：<strong>${totalCost}</strong> 元
+        <p>實際抽取次數：<strong>${trials}</strong> 次<br>
+           總花費：<strong>${cost}</strong> 元
         </p>`;
     });
   </script>
