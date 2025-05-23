@@ -249,14 +249,15 @@ startAutoSimBtn.addEventListener('click', () => {
 });
 
 // --- 修改 displayAnalysisResults 函數簽名和內容 ---
+
 function displayAnalysisResults(
     allDraws, totalDraws, minDraws, maxDraws, numSimulations,
-    theoreticalExpectedDraws, // 新增參數
-    sumOfDuplicateProportions  // 新增參數
+    theoreticalExpectedDraws,
+    sumOfDuplicateProportions
 ) {
+    // ... (前面計算 averageDraws, averageCost, medianDraws, etc. 的程式碼保持不變) ...
     const averageDraws = numSimulations > 0 ? totalDraws / numSimulations : 0;
     const averageCost = averageDraws * pricePerPack;
-    
     allDraws.sort((a, b) => a - b);
     let medianDraws;
     const mid = Math.floor(numSimulations / 2);
@@ -268,13 +269,70 @@ function displayAnalysisResults(
         medianDraws = 0; 
     }
     const medianCost = medianDraws * pricePerPack;
-
-    // --- 新增：計算理論期望花費和平均重複品機率 ---
     const theoreticalExpectedCost = theoreticalExpectedDraws * pricePerPack;
     const averageDuplicateRate = numSimulations > 0 ? sumOfDuplicateProportions / numSimulations : 0;
-    // --- 新增結束 ---
 
-    // 保持您原有的中文詞句，並插入新的統計數據
+
+    // --- 修改：準備直方圖數據和 HTML ---
+    let histogramHTML = '';
+    if (numSimulations > 0 && allDraws.length > 0) {
+        const bins = [
+            { label: '6-10', min: 6, max: 10, count: 0 },
+            { label: '11-15', min: 11, max: 15, count: 0 },
+            { label: '16-20', min: 16, max: 20, count: 0 },
+            { label: '21-25', min: 21, max: 25, count: 0 },
+            { label: '26-30', min: 26, max: 30, count: 0 },
+            { label: '31-40', min: 31, max: 40, count: 0 },
+            { label: '41-50', min: 41, max: 50, count: 0 },
+            { label: '51+', min: 51, max: Infinity, count: 0 }
+        ];
+
+        allDraws.forEach(drawCount => {
+            for (const bin of bins) {
+                if (drawCount >= bin.min && drawCount <= bin.max) {
+                    bin.count++;
+                    break; 
+                }
+            }
+        });
+
+        const maxFreq = Math.max(...bins.map(bin => bin.count), 0);
+        
+        // ***** 新增：定義圖表條形區域的最大像素高度 *****
+        const chartBarAreaMaxHeightPx = 100; // 例如，條形最高為 100px，您可以調整這個值
+                                            // CSS中 .histogram-container 的 height 應大於此值以容納標籤
+
+        histogramHTML = '<div class="histogram-container">';
+        let hasDataInBins = false;
+
+        bins.forEach(bin => {
+            if (bin.count > 0 || (maxDraws > 0 && bin.min <= maxDraws)) {
+                hasDataInBins = true;
+                // ***** 修改：計算條形的像素高度 *****
+                const barPixelHeight = maxFreq > 0 ? Math.round((bin.count / maxFreq) * chartBarAreaMaxHeightPx) : 0;
+                histogramHTML += `
+                    <div class="histogram-bar-group">
+                        <div class="histogram-bar" style="height: ${barPixelHeight}px;" title="${bin.label}: ${bin.count} 次模擬"></div>
+                        <div class="histogram-label">${bin.label}</div>
+                        <div class="histogram-freq">${bin.count}次</div>
+                    </div>
+                `;
+            }
+        });
+        histogramHTML += '</div>';
+
+        if (!hasDataInBins && allDraws.length > 0) {
+            histogramHTML = '<div class="histogram-container"><p style="width:100%; text-align:center; color:#ccc; font-size:0.8em;">所有模擬結果均超出預設分組範圍，或數據過於分散。</p></div>';
+        } else if (allDraws.length === 0) {
+             histogramHTML = '<div class="histogram-container"><p style="width:100%; text-align:center; color:#ccc; font-size:0.8em;">無有效模擬數據生成分佈圖。</p></div>';
+        }
+
+    } else {
+        histogramHTML = '<div class="histogram-container"><p style="width:100%; text-align:center; color:#ccc; font-size:0.8em;">模擬次數不足，無法生成分佈圖。</p></div>';
+    }
+    // --- 直方圖數據準備結束 ---
+
+    // ... (後續的 innerHTML 設定，將 ${histogramHTML} 放入正確位置) ...
     autoSimResultDiv.innerHTML = `
         <h3>自動模擬分析結果 (共 ${numSimulations} 次)</h3>
         <p>平均抽獎次數：<strong>${averageDraws.toFixed(2)}</strong> 次</p>
@@ -287,7 +345,12 @@ function displayAnalysisResults(
         <p>理論期望抽獎次數：<strong>${theoreticalExpectedDraws.toFixed(2)}</strong> 次</p>
         <p>理論期望花費：<strong>${new Intl.NumberFormat('zh-TW', { style: 'currency', currency: 'TWD', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(theoreticalExpectedCost)}</strong></p>
         <p>模擬中，抽到重複品的平均機率：<strong>${(averageDuplicateRate * 100).toFixed(2)}%</strong></p>
-        <hr>
+        
+        <hr class="info-divider">
+        <h4>抽獎次數分佈圖：</h4>
+        ${histogramHTML} 
+
+        <hr class="info-divider">
         <p class="description" style="text-align:center;"><strong>提醒：</strong>以上為 ${numSimulations} 次模擬的統計結果，<br>實際運氣還是要看個人造化喔！祝您好運！</p>
     `;
     autoSimResultDiv.style.display = 'block';
