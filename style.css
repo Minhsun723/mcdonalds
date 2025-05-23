@@ -411,3 +411,108 @@ button:disabled { background-color: #4a6b22; cursor: not-allowed; opacity: 0.7; 
     .analysis-result p { font-size: 0.9em; }
     .analysis-result h3 { font-size: 1em; }
 }
+
+/* --- 直方圖/機率分佈圖樣式 --- */
+.analysis-result h4 { /* 圖表上方的標題 */
+    font-size: 1em;
+    color: #ffdd00;
+    text-align: center;
+    margin-top: 1.5em;
+    margin-bottom: 0.8em;
+}
+
+/* --- 桌面版直方圖容器樣式 (使用 Grid) --- */
+/* --- style.css 修改部分 --- */
+
+/* ... (您現有的其他 CSS 規則) ... */
+
+.histogram-container {
+    display: grid;
+    /* 調整每列的最小寬度，並保持1fr使其能利用剩餘空間 */
+    grid-template-columns: repeat(8, minmax(46px, 1fr)); /* 嘗試每列至少46px */
+    align-items: end;
+    gap: 4px;   /* ***** 減小桌面版間隙以節省空間 ***** */
+    height: 150px;
+    padding: 10px 2px 5px 2px; /* 容器的左右內邊距設為最小值 */
+    border: 1px solid #5f8a2b;
+    background-color: rgba(0,0,0,0.2);
+    border-radius: 5px;
+    margin-bottom: 1.2em;
+    /* overflow-x: auto; */ /* ***** 移除此行，禁止桌面版水平滾動 ***** */
+}
+
+.histogram-bar-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    padding: 0;
+    /* overflow: hidden; */ /* 保持註解或移除 */
+}
+
+.histogram-bar {
+    width: 70%; /* 條形在其組內的寬度 */
+    /* max-width: 30px; */
+    background-color: #7ebf49;
+    border: 1px solid #3e5a16;
+    border-bottom: none;
+    border-radius: 3px 3px 0 0;
+    transition: height 0.5s ease-out;
+    position: relative;
+}
+
+.histogram-label {
+    font-size: 0.6em;
+    color: #cccccc;
+    margin-top: 4px;
+    line-height: 1.1;
+    white-space: nowrap; /* 強制不換行 */
+}
+
+.histogram-freq {
+    font-size: 0.55em;
+    color: #ffdd00;
+    margin-top: 2px;
+    line-height: 1.1;
+    white-space: nowrap; /* 強制不換行 */
+}
+
+/* --- 手機版直方圖調整 --- */
+@media (max-width: 600px) {
+    .histogram-container {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-around; /* 讓組均勻分佈，它們會自己收縮 */
+        /* overflow-x: auto; */ /* ***** 移除此行，禁止手機版水平滾動 ***** */
+        flex-wrap: nowrap; /* 確保不換行到下一行 */
+        height: 120px;
+        padding: 8px 1px 5px 1px; /* 手機版容器左右內邊距設為最小值 */
+        border-radius: 5px;
+    }
+    .histogram-bar-group {
+        /* min-width: 50px; */ /* 移除固定的min-width，讓flex去收縮 */
+        margin: 0 1px;    /* ***** 組之間用非常小的margin分隔 ***** */
+        padding: 0;
+        flex: 1 1 auto;   /* ***** 允許條形組收縮和增長，並基於內容自動調整基礎大小 ***** */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        max-width: 50px; /* 新增：限制每個組的最大寬度，避免過度拉伸 */
+    }
+    .histogram-bar {
+        width: 80%; /* 手機上條形寬度 */
+    }
+    /* 為手機版進一步縮小字體以適應更窄的空間 */
+    .histogram-label {
+        font-size: 0.55em; 
+        white-space: nowrap;
+        margin-top: 3px;
+    }
+    .histogram-freq {
+        font-size: 0.5em;
+        white-space: nowrap;
+        margin-top: 1px;
+    }
+}
