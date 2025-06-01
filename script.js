@@ -294,6 +294,9 @@ document.addEventListener('DOMContentLoaded', function() {
         void autoSimResultDiv.offsetWidth;
         autoSimResultDiv.classList.add('fade-in');
         playSound(simCompleteSound);
+
+        // 新增的程式碼：捲動到結果區塊
+        autoSimResultDiv.scrollIntoView({ behavior: 'smooth' });
     }
 
     // --- 版權聲明相關 DOM 元素獲取 ---
@@ -305,7 +308,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // --- 版權按鈕和返回按鈕的事件監聽 ---
     if (copyrightBtn && copyrightSection && backToSimBtn && simulatorContainer) {
         copyrightBtn.addEventListener('click', () => {
-            simulatorContainer.style.display = 'none';
+            // simulatorContainer.style.display = 'none';
             copyrightSection.style.display = 'flex';
             setTimeout(() => { // 確保 display 生效後再加 class 以觸發 transition
                 copyrightSection.classList.add('visible');
@@ -318,30 +321,30 @@ document.addEventListener('DOMContentLoaded', function() {
             // 不需要 JS 手動設定 display:none，除非不使用 visibility transition
             // 在 CSS transition 結束後 (0.3s), visibility 會變為 hidden
 
-            simulatorContainer.style.display = 'block'; // 恢復模擬器主容器的顯示
+            // simulatorContainer.style.display = 'block'; // 恢復模擬器主容器的顯示
 
             // 重置模擬器到初始選擇模式狀態
-            if (modeSelectionDiv) modeSelectionDiv.style.display = 'block';
-            if (manualSimSectionDiv) manualSimSectionDiv.style.display = 'none';
-            if (autoSimSectionDiv) autoSimSectionDiv.style.display = 'none';
+            // if (modeSelectionDiv) modeSelectionDiv.style.display = 'block';
+            // if (manualSimSectionDiv) manualSimSectionDiv.style.display = 'none';
+            // if (autoSimSectionDiv) autoSimSectionDiv.style.display = 'none';
 
-            if (selectManualBtn) selectManualBtn.classList.remove('active');
-            if (selectAutoBtn) selectAutoBtn.classList.remove('active');
+            // if (selectManualBtn) selectManualBtn.classList.remove('active');
+            // if (selectAutoBtn) selectAutoBtn.classList.remove('active');
 
-            if (resultDiv) {
-                resultDiv.innerHTML = '<p>&nbsp;</p>';
-                resultDiv.classList.remove('fade-in');
-                resultDiv.style.opacity = '';
-            }
+            // if (resultDiv) {
+            //     resultDiv.innerHTML = '<p>&nbsp;</p>';
+            //     resultDiv.classList.remove('fade-in');
+            //     resultDiv.style.opacity = '';
+            // }
 
-            if (autoSimProgressDiv) autoSimProgressDiv.style.display = 'none';
-            if (autoSimResultDiv) {
-                autoSimResultDiv.style.display = 'none';
-                autoSimResultDiv.classList.remove('fade-in');
-            }
+            // if (autoSimProgressDiv) autoSimProgressDiv.style.display = 'none';
+            // if (autoSimResultDiv) {
+            //     autoSimResultDiv.style.display = 'none';
+            //     autoSimResultDiv.classList.remove('fade-in');
+            // }
             
-            if(startAutoSimBtn) startAutoSimBtn.disabled = false;
-            if(simBtn) simBtn.disabled = false;
+            // if(startAutoSimBtn) startAutoSimBtn.disabled = false;
+            // if(simBtn) simBtn.disabled = false;
         });
     }
 });
