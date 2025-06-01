@@ -625,3 +625,155 @@ button:disabled { background-color: #4a6b22; cursor: not-allowed; opacity: 0.7; 
         padding: 10px 20px;
     }
 }
+
+/* --- 設定按鈕與選單樣式 --- */
+#settingsArea {
+    position: fixed;
+    top: 70px; /* 問號按鈕高度約 40px + 邊框 + 間距 */
+    right: 20px;
+    z-index: 999; /* 與版權按鈕同級，或略低於版權彈窗 */
+}
+
+#settingsBtn {
+    width: 40px;
+    height: 40px;
+    background-color: #5f8a2b;
+    color: white;
+    border: 2px solid #3e5a16;
+    border-radius: 50%; /* 圓形 */
+    font-family: 'Press Start 2P', cursive; /* 保持字體一致 */
+    font-size: 20px;
+    /* line-height: 36px; /* 調整使圖示垂直居中 */
+    /* text-align: center;*/
+    cursor: pointer;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+    transition: background-color 0.3s, transform 0.3s;
+    padding: 0;
+    /* display: block; /* 確保按鈕獨佔一行，選單相對其定位 */
+    display: flex;
+    align-items: center; /* 垂直置中 */
+    justify-content: center; /* 水平置中 */
+}
+
+#settingsBtn:hover {
+    background-color: #7ebf49;
+    transform: scale(1.1);
+}
+
+#settingsMenu {
+    display: none; /* 初始隱藏 */
+    position: absolute;
+    top: 50px; /* 相對於 #settingsArea 的頂部，或 #settingsBtn 的下方 */
+    right: 0;
+    width: 220px;
+    background-color: rgba(40, 50, 15, 0.95); /* 深色背景，同版權彈窗 */
+    color: #e0e0e0;
+    border: 3px solid #5f8a2b; /* 邊框風格 */
+    border-radius: 8px;
+    padding: 15px 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    font-family: 'Minecraft Ten Font', 'Press Start 2P', cursive; /* 保持字體一致 */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out, visibility 0s linear 0.3s;
+}
+
+#settingsMenu.visible {
+    display: block; /* JS 會切換這個（或者直接改 style.display）*/
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    transition-delay: 0s;
+}
+
+.settings-menu-title {
+    font-size: 1em; /* 調整標題大小 */
+    color: #ffdd00; /* 標題顏色，同主要高亮 */
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 15px;
+    text-shadow: 1px 1px #3e5a16;
+}
+
+.setting-item {
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+}
+
+.setting-item:last-child {
+    margin-bottom: 0;
+}
+
+.settings-checkbox {
+    /* 自訂 checkbox 外觀 (可選，或者使用瀏覽器預設) */
+    /* 簡易調整，使其在像素風格下更和諧 */
+    appearance: none;
+    -webkit-appearance: none;
+    background-color: rgba(0,0,0,0.3);
+    border: 2px solid #5f8a2b;
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+    cursor: pointer;
+    position: relative;
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+
+.settings-checkbox:checked {
+    background-color: #7ebf49;
+}
+
+.settings-checkbox:checked::after {
+    content: '✔'; /* 或其他像素風格的勾號 */
+    font-size: 12px; /* 調整勾號大小 */
+    color: #ffffff;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    line-height: 1; /* 確保垂直居中 */
+    font-family: sans-serif; /* 勾號用一個通用字體 */
+}
+
+.setting-item label {
+    font-size: 0.85em; /* 調整標籤文字大小 */
+    color: #e0e0e0;
+    cursor: pointer;
+    line-height: 1.4;
+}
+
+/* 手機版適應性調整 (可選) */
+@media (max-width: 600px) {
+    #settingsArea {
+        top: 60px; /* 調整手機版位置 */
+        right: 15px;
+    }
+    #settingsBtn {
+        width: 35px;
+        height: 35px;
+        font-size: 18px;
+        line-height: 31px;
+    }
+    #settingsMenu {
+        top: 45px;
+        width: 180px; /* 手機版選單寬度稍小 */
+        padding: 12px 15px;
+    }
+    .settings-menu-title {
+        font-size: 0.9em;
+        margin-bottom: 12px;
+    }
+    .setting-item label {
+        font-size: 0.8em;
+    }
+    .settings-checkbox {
+        width: 14px;
+        height: 14px;
+    }
+    .settings-checkbox:checked::after {
+        font-size: 10px;
+    }
+}
