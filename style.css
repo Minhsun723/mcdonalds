@@ -777,3 +777,68 @@ button:disabled { background-color: #4a6b22; cursor: not-allowed; opacity: 0.7; 
         font-size: 10px;
     }
 }
+
+/* --- 提示框樣式 --- */
+.toast-notification {
+    position: fixed;
+    bottom: -100px; /* 初始位置在螢幕外 */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(40, 50, 15, 0.95); /* 深色背景，同彈窗 */
+    color: #e0e0e0;
+    padding: 12px 20px;
+    border-radius: 8px;
+    border: 2px solid #5f8a2b; /* 邊框風格 */
+    box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+    z-index: 1001; /* 比其他彈窗高（如版權彈窗是1000） */
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.85em;
+    text-align: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease-in-out, bottom 0.4s ease-in-out, visibility 0s linear 0.4s;
+    max-width: 80%;
+    line-height: 1.5;
+}
+
+.toast-notification.visible {
+    opacity: 1;
+    visibility: visible;
+    bottom: 30px; /* 向上滑入到最終位置 */
+    transition-delay: 0s;
+}
+
+.toast-notification.warning {
+    background-color: rgba(200, 150, 30, 0.95); /* 警告顏色 (橘黃色系) */
+    border-color: #ffdd00;
+    color: #000000; /* 深色文字確保可讀性 */
+    text-shadow: none;
+}
+.toast-notification.warning strong { /* 如果訊息中有 strong 標籤 */
+    color: #333333;
+    text-shadow: none;
+}
+
+
+.toast-notification.error {
+    background-color: rgba(180, 50, 50, 0.95); /* 錯誤顏色 (紅色系) */
+    border-color: #ff6b6b;
+    color: #ffffff; /* 白色文字 */
+}
+.toast-notification.error strong { /* 如果訊息中有 strong 標籤 */
+    color: #ffffff;
+    text-shadow: 1px 1px #8B0000; /* 深紅色陰影 */
+}
+
+
+@media (max-width: 600px) {
+    .toast-notification {
+        font-size: 0.9em; /* 手機版字體稍大一些，因為主介面也放大了 */
+        padding: 10px 15px;
+        max-width: 90%;
+        bottom: -100px; /* 確保初始位置在螢幕外 */
+    }
+    .toast-notification.visible {
+        bottom: 20px; /* 手機版最終位置 */
+    }
+}
