@@ -1,3 +1,57 @@
+let toastTimeout = null; // 用於清除上一個提示的計時器
+
+/**
+ * 顯示一個短暫的提示訊息框
+ * @param {string} message 要顯示的訊息
+ * @param {'info' | 'warning' | 'error'} type 訊息類型 ('info', 'warning', 'error')
+ * @param {number} duration 訊息顯示的毫秒數
+ */
+function showToast(message, type = 'info', duration = 3000) {
+    const toastElement = document.getElementById('toastNotification');
+    const messageElement = document.getElementById('toastMessage');
+
+    if (!toastElement || !messageElement) {
+        // Fallback to console if toast elements are missing in DOM
+        const fallbackMessage = `[Toast Fallback - ${type.toUpperCase()}]: ${message}`;
+        switch(type) {
+            case 'warning': console.warn(fallbackMessage); break;
+            case 'error': console.error(fallbackMessage); break;
+            default: console.log(fallbackMessage);
+        }
+        return;
+    }
+
+    messageElement.textContent = message;
+
+    // Reset classes
+    toastElement.classList.remove('visible', 'warning', 'error');
+    // Force reflow to ensure a clean slate for transition if message is rapidly changed
+    void toastElement.offsetWidth;
+
+
+    // Add type class
+    if (type === 'warning') {
+        toastElement.classList.add('warning');
+    } else if (type === 'error') {
+        toastElement.classList.add('error');
+    }
+    // 'info' type uses default styling
+
+    // Clear previous timeout if any
+    if (toastTimeout) {
+        clearTimeout(toastTimeout);
+    }
+
+    // Show toast
+    toastElement.classList.add('visible');
+
+    // Set timeout to hide toast
+    toastTimeout = setTimeout(() => {
+        toastElement.classList.remove('visible');
+        toastTimeout = null; // Reset timeout id
+    }, duration);
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     const backgroundTexturePaths = [
         'grass.jpeg',
@@ -9,7 +63,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const selectedTexturePath = backgroundTexturePaths[randomIndex];
     document.body.style.backgroundImage = `url('${selectedTexturePath}')`;
     if (selectedTexturePath.includes("YOUR_FILENAME_HERE")) {
-        console.warn("提醒：您可能還沒有設定正確的本地隨機背景圖片路徑！將使用 CSS 中的預設背景。實際設定路徑: " + selectedTexturePath);
+        // console.warn("提醒：您可能還沒有設定正確的本地隨機背景圖片路徑！將使用 CSS 中的預設背景。實際設定路徑: " + selectedTexturePath);
+        showToast("提醒：未設定正確背景圖片路徑，將使用預設背景。", "warning", 3000);
     }
 
     // --- 預設值與全域變數 ---
@@ -72,7 +127,9 @@ document.addEventListener('DOMContentLoaded', function() {
             return newSum;
         }, 0);
         if (cumProbs.length > 0 && Math.abs(cumProbs[cumProbs.length - 1] - 1.0) > 1e-9) {
-            console.warn("警告：目前累積機率總和不為 1，請檢查機率設定。目前總和:", cumProbs[cumProbs.length - 1]);
+            // console.warn("警告：目前累積機率總和不為 1，請檢查機率設定。目前總和:", cumProbs[cumProbs.length - 1]);
+            const sumPercent = (sumForWarning * 100).toFixed(2);
+            showToast(`警告：機率總和不為 100% (目前 ${sumPercent}%)，請檢查設定。`, "warning", 3000);
         }
     }
 
@@ -121,7 +178,8 @@ document.addEventListener('DOMContentLoaded', function() {
         // 檢查是否有至少一個物品的機率大於0
         const canCollectAnything = probs.some(p => p > 0);
         if (!canCollectAnything && numberOfTypes > 0) {
-            console.error("所有物品的抽取機率均為0，無法進行模擬。");
+            // console.error("所有物品的抽取機率均為0，無法進行模擬。");
+            showToast("錯誤：所有物品機率均為0，無法模擬。", "error", 3000);
             return maxDraws; // 或返回一個表示錯誤的值
         }
         
@@ -149,7 +207,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
         if (safetyBreak >= maxDraws && collected.size < numberOfTypes) {
-            console.error(`模擬次數達到上限 (${maxDraws})，但仍未集齊所有種類 (${collected.size}/${numberOfTypes})。可能是部分物品機率為0導致。`);
+            // console.error(`模擬次數達到上限 (${maxDraws})，但仍未集齊所有種類 (${collected.size}/${numberOfTypes})。可能是部分物品機率為0導致。`);
+            showToast(`模擬達到上限 (${maxDraws}次) 仍未集齊 (${collected.size}/${numberOfTypes})。`, "warning", 3000);
         }
         return draws;
     }
@@ -476,15 +535,17 @@ document.addEventListener('DOMContentLoaded', function() {
     if (unlimitedSimModeCheckbox && simulationCountInput) {
         unlimitedSimModeCheckbox.addEventListener('change', function() {
             if (this.checked) {
-                alert("無限制模擬模式已啟用。\n請注意：若輸入過大的模擬次數，可能會導致瀏覽器長時間運算甚至無回應，請謹慎斟酌輸入！");
+                // alert("無限制模擬模式已啟用。\n請注意：若輸入過大的模擬次數，可能會導致瀏覽器長時間運算甚至無回應，請謹慎斟酌輸入！");
+                showToast("無限制模擬模式已啟用。注意：過大模擬次數可能導致瀏覽器緩慢或無回應，請謹慎！", "warning", 3000);
                 simulationCountInput.removeAttribute('max');
-                console.log("無限制模擬模式已啟用，已移除模擬次數上限。");
+                // console.log("無限制模擬模式已啟用，已移除模擬次數上限。");
             } else {
                 simulationCountInput.setAttribute('max', '5000');
                 if (parseInt(simulationCountInput.value) > 5000) {
                     simulationCountInput.value = "5000";
                 }
-                console.log("無限制模擬模式已停用，模擬次數上限恢復為 5000。");
+                // console.log("無限制模擬模式已停用，模擬次數上限恢復為 5000。");
+                showToast("無限制模擬模式已停用，次數上限恢復為 5000。", "info", 3000);
             }
         });
     }
@@ -571,10 +632,10 @@ document.addEventListener('DOMContentLoaded', function() {
             if (this.checked) {
                 if (customInputsArea) customInputsArea.style.display = 'block';
                 populateCustomInputs(); 
-                console.log("自訂義模式已啟用");
+                // console.log("自訂義模式已啟用");
+                showToast("自訂義模式已啟用。", "info");
             } else {
                 if (customInputsArea) customInputsArea.style.display = 'none';
-
                 // --- 當取消勾選自訂義模式時，恢復預設值 ---
                 pricePerPack = defaultPricePerPack;
                 probs = [...defaultProbs];
@@ -584,8 +645,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // 更新自訂輸入框內的數值為預設值，以便下次啟用時顯示正確
                 populateCustomInputs();
-                
-                console.log("自訂義模式已停用");
+
+                // console.log("自訂義模式已停用");
+                showToast("自訂義模式已停用，恢復預設值。", "info");
             }
         });
     }
@@ -594,20 +656,23 @@ document.addEventListener('DOMContentLoaded', function() {
         applyCustomSettingsBtn.addEventListener('click', function() {
             const newCustomPrice = parseInt(customPriceInput.value, 10);
             if (isNaN(newCustomPrice) || newCustomPrice < 0) {
-                alert("請輸入有效的套餐單價（非負整數）。");
+                // alert("請輸入有效的套餐單價（非負整數）。");
+                showToast("請輸入有效的套餐單價（非負整數）。", "warning");
                 customPriceInput.focus();
                 return;
             }
 
             const newCustomProbsPercentages = customProbInputs.map(input => parseFloat(input.value));
             if (newCustomProbsPercentages.some(isNaN)) {
-                alert("部分機率值無效，請檢查輸入。");
+                // alert("部分機率值無效，請檢查輸入。");
+                showToast("部分機率值無效，請檢查輸入。", "warning");
                 return;
             }
 
             let probSumPercentage = newCustomProbsPercentages.reduce((sum, p) => sum + p, 0);
             if (Math.abs(probSumPercentage - 100.0) > 0.05) { // 允許0.05的誤差
                 alert(`機率總和必須為 100%！目前總和為 ${probSumPercentage.toFixed(1)}%。請調整後再套用。`);
+                // showToast(`機率總和必須為 100%！(目前 ${probSumPercentage.toFixed(1)}%)`, "warning", 4000);
                 return;
             }
 
@@ -617,8 +682,9 @@ document.addEventListener('DOMContentLoaded', function() {
             calculateCumulativeProbs(); 
             updateInfoBoxDisplay();   
             
-            alert("自訂設定已成功套用！");
-            console.log("自訂設定已套用:", { pricePerPack, probs });
+            // alert("自訂設定已成功套用！");
+            showToast("自訂設定已成功套用！", "info");
+            // console.log("自訂設定已套用:", { pricePerPack, probs });
         });
     }
 
@@ -633,8 +699,9 @@ document.addEventListener('DOMContentLoaded', function() {
             if (customModeCheckbox.checked && customInputsArea && customInputsArea.style.display !== 'none') {
                 populateCustomInputs(); 
             }
-            alert("已恢復為預設設定！");
-            console.log("已恢復預設設定:", { pricePerPack, probs });
+            // alert("已恢復為預設設定！");
+            // console.log("已恢復預設設定:", { pricePerPack, probs });
+            showToast("已恢復為預設設定！", "info");
         });
     }
 
