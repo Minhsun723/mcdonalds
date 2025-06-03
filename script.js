@@ -574,6 +574,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log("自訂義模式已啟用");
             } else {
                 if (customInputsArea) customInputsArea.style.display = 'none';
+
+                // --- 當取消勾選自訂義模式時，恢復預設值 ---
+                pricePerPack = defaultPricePerPack;
+                probs = [...defaultProbs];
+                
+                calculateCumulativeProbs(); 
+                updateInfoBoxDisplay();   
+                
+                // 更新自訂輸入框內的數值為預設值，以便下次啟用時顯示正確
+                populateCustomInputs();
+                
                 console.log("自訂義模式已停用");
             }
         });
