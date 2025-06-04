@@ -230,12 +230,21 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 50);
     });
 
+    simulationCountInput.addEventListener('keypress', function(event) {
+        // 檢查是否按下 Enter 鍵 (keyCode 13)
+        if (event.key === 'Enter' || event.keyCode === 13) {
+            event.preventDefault(); // 防止可能的表單提交行為
+            startAutoSimBtn.click(); // 觸發開始按鈕的點擊事件
+        }
+    });
+
     startAutoSimBtn.addEventListener('click', () => {
         isAbortRequested = false;
         const numSimulations = parseInt(simulationCountInput.value, 10);
+        const maxSimValue = unlimitedSimModeCheckbox.checked ? Infinity : 5000;
 
-        if (isNaN(numSimulations) || numSimulations < 1) {
-            alert(`請輸入有效的模擬次數 (至少為 1)。`);
+        if (isNaN(numSimulations) || numSimulations < 1 || (!unlimitedSimModeCheckbox.checked && numSimulations > maxSimValue) ) {
+            alert(`請輸入有效的模擬次數 (1 到 ${unlimitedSimModeCheckbox.checked ? '合理的最大值' : '5000'} 之間)。`);
             simulationCountInput.focus();
             return;
         }
