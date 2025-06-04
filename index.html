@@ -89,7 +89,10 @@
                 <label for="simulationCount">輸入模擬次數 (1-5000)：</label>
                 <input type="number" id="simulationCount" name="simulationCount" min="1" max="5000" value="100">
             </div>
-            <button id="startAutoSimBtn">開始自動模擬！</button>
+            <div class="simulation-controls" style="text-align: center; margin-bottom: 1em;">
+                <button id="startAutoSimBtn">開始自動模擬！</button>
+                <button id="abortAutoSimBtn" class="abort-button" style="display: none;">中止模擬</button>
+            </div>
             <div id="autoSimProgress" class="progress-area" style="display: none;">
                 <p id="progressText">模擬進行中...</p>
                 <div class="progress-bar-container">
